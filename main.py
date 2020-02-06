@@ -12,12 +12,11 @@ confirmed = singapore_data['confirmed']['cases']
 recovered = singapore_data['recovered']['cases']
 death = singapore_data['death']['cases']
 
-
-
 # all the lenghts should be the same
 length = len(confirmed)
 print(length)
 
+# move this into the nCOV class
 if len(recovered) != length:
   for i in range(length - len(recovered)):
     recovered.append(None)

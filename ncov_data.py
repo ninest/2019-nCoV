@@ -10,7 +10,6 @@ url = lambda sheet : f"https://sheets.googleapis.com/v4/spreadsheets/{SPREADSHEE
 
 class NCOVData:
   def __init__(self):
-    # self.country = country
     pass
 
   def get_sheet_data(self, sheet_url):  
