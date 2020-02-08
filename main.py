@@ -4,6 +4,7 @@ import numpy as np
 from ncov_data import url, NCOVData
 
 ncov_data = NCOVData()
+# TODO: don't hardcode
 singapore_data = ncov_data.get_all_country_data('Singapore')
 
 dates = singapore_data['confirmed']['dates']  # same for all
@@ -25,13 +26,8 @@ plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %-d, %-y'))
 # interval so graph is not cluttered
 plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
 
-# possibility of deaths and recovers to be empty
-try: plt.plot(dates, death,  label='Death cases')
-except: print("No deaths")
-
-try: plt.plot(dates, recovered,  label='Recovered cases')
-except: print("No recoveries")
-
+plt.plot(dates, death,  label='Death cases')
+plt.plot(dates, recovered,  label='Recovered cases')
 plt.plot(dates, confirmed,  label='Confirmed cases')
 
 plt.xlabel('Date')
@@ -46,4 +42,5 @@ plt.legend()
 
 plt.tight_layout()
 
-plt.show()
+# plt.show()
+plt.savefig('fig.png')
