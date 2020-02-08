@@ -21,7 +21,7 @@ def produce_chart(country=None, state=None, log=False):
 
   # style preset
   # plt.xkcd()
-  # plt.style.use('fivethirtyeight')
+  plt.style.use('fivethirtyeight')
 
   # format dates correctyl and nicely %m/%d/%Y
   plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %-d, %-y'))
@@ -29,9 +29,9 @@ def produce_chart(country=None, state=None, log=False):
   # interval so graph is not cluttered
   plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
 
-  plt.plot(dates, death,  label='Death cases')
-  plt.plot(dates, recovered,  label='Recovered cases')
-  plt.plot(dates, confirmed,  label='Confirmed cases')
+  plt.plot(dates, death, color='r', label='Death cases')
+  plt.plot(dates, recovered, color='g', label='Recovered cases')
+  plt.plot(dates, confirmed, color='b', label='Confirmed cases')
 
   plt.xlabel('Date')
   plt.ylabel('Cases')
