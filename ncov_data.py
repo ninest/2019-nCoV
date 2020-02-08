@@ -18,7 +18,7 @@ class NCOVData:
       return json.loads(response.content)
   
 
-  def get_data(self, sheet_url, country=None): # only gets data for either confirmed, deaths, or recovered
+  def get_data(self, sheet_url, country=None, state=None): # only gets data for either confirmed, deaths, or recovered
     content = self.get_sheet_data(sheet_url)
 
     all_places = []
@@ -52,6 +52,15 @@ class NCOVData:
         'cases': cases
       })
     
+    if state == None:
+      pass
+    else:
+      filtered_all_places = [
+        place for place in all_places 
+        if place['province_state'] == state
+      ]
+      return filtered_all_places[0]
+
     if country == None:
       return all_places
     else:
@@ -62,10 +71,10 @@ class NCOVData:
       return filtered_all_places[0]
     
   
-  def get_all_country_data(self, country):
-    confirmed = self.get_data(url('Confirmed'), country)
-    recovered = self.get_data(url('Recovered'), country)
-    death = self.get_data(url('Death'), country)
+  def get_all_country_data(self, country, state=None):
+    confirmed = self.get_data(url('Confirmed'), country, state)
+    recovered = self.get_data(url('Recovered'), country, state)
+    death = self.get_data(url('Death'), country, state)
 
     # need to make sure the number of cases are the same, otherwise, just add previous to fill up empty spots
     length = len(confirmed['cases'])

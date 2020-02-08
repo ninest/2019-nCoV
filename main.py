@@ -3,44 +3,71 @@ import numpy as np
 
 from ncov_data import url, NCOVData
 
-ncov_data = NCOVData()
-# TODO: don't hardcode
-singapore_data = ncov_data.get_all_country_data('Singapore')
+def produce_chart(country=None, state=None, log=False):
+  if country == None and state == None:
+    raise Exception('No place/region provided')
 
-dates = singapore_data['confirmed']['dates']  # same for all
+  ncov_data = NCOVData()
+  place_data = ncov_data.get_all_country_data(country=country, state=state)
 
-confirmed = singapore_data['confirmed']['cases']
-recovered = singapore_data['recovered']['cases']
-death = singapore_data['death']['cases']
+  dates = place_data['confirmed']['dates']  # same for all
 
-# # convert dates to matplotlib dates
-dates = [mdates.date2num(d) for d in dates]
+  confirmed = place_data['confirmed']['cases']
+  recovered = place_data['recovered']['cases']
+  death = place_data['death']['cases']
 
-# style preset
-# plt.xkcd()
-# plt.style.use('fivethirtyeight')
+  # # convert dates to matplotlib dates
+  dates = [mdates.date2num(d) for d in dates]
 
-# format dates correctyl and nicely %m/%d/%Y
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %-d, %-y'))
+  # style preset
+  # plt.xkcd()
+  # plt.style.use('fivethirtyeight')
 
-# interval so graph is not cluttered
-plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
+  # format dates correctyl and nicely %m/%d/%Y
+  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %-d, %-y'))
 
-plt.plot(dates, death,  label='Death cases')
-plt.plot(dates, recovered,  label='Recovered cases')
-plt.plot(dates, confirmed,  label='Confirmed cases')
+  # interval so graph is not cluttered
+  plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
 
-plt.xlabel('Date')
-plt.ylabel('Cases')
-plt.title('2019-nCoV Singapore')
+  plt.plot(dates, death,  label='Death cases')
+  plt.plot(dates, recovered,  label='Recovered cases')
+  plt.plot(dates, confirmed,  label='Confirmed cases')
 
-# # # make the dates slant
-plt.gcf().autofmt_xdate()
+  plt.xlabel('Date')
+  plt.ylabel('Cases')
 
-# plt.yscale("log")
-plt.legend()
+  if state:
+    place_title = f'{state}, {country}'
+  else:
+    place_title = country
+  plt.title(f'2019-nCoV {place_title}')
 
-plt.tight_layout()
+  # # # make the dates slant
+  plt.gcf().autofmt_xdate()
 
-# plt.show()
-plt.savefig('fig.png')
+  if log: plt.yscale("log")
+
+  plt.legend()
+
+  plt.tight_layout()
+
+  # plt.show()
+
+  if state:
+    save_name = f"{country.replace(' ', '_')}-{state.replace(' ', '_')}"
+    if log: save_name += '-log'
+  else:
+    save_name = f"{country.replace(' ', '_')}"
+
+  plt.savefig(f'charts/{save_name}.png')
+
+  # reset plot
+  plt.cla()
+  plt.clf()
+
+  print(country)
+
+produce_chart(country='Singapore')
+produce_chart(country='Japan')
+produce_chart(country='Mainland China', state='Hubei')
+produce_chart(country='Mainland China', state='Hubei', log=True)
