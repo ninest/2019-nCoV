@@ -55,7 +55,10 @@ class NCOVData:
     if country == None:
       return all_places
     else:
-      filtered_all_places = [place for place in all_places if place['country_region'] == country]
+      filtered_all_places = [
+        place for place in all_places 
+        if place['country_region'] == country
+      ]
       return filtered_all_places[0]
     
   
@@ -64,8 +67,26 @@ class NCOVData:
     recovered = self.get_data(url('Recovered'), country)
     death = self.get_data(url('Death'), country)
 
+    # need to make sure the number of cases are the same, otherwise, just add previous to fill up empty spots
+    length = len(confirmed['cases'])
+
+    if len(recovered['cases']) < length:
+      for _ in range(len(recovered['cases']), length):
+        recovered['cases'].append(
+          recovered['cases'][-1]
+        )
+    
+    if len(death['cases']) < length:
+      for _ in range(len(death['cases']), length):
+        death['cases'].append(
+          death['cases'][-1]
+        )
+
+
     return {
       'confirmed': confirmed,
       'recovered': recovered,
       'death': death,
     }
+
+NCOVData().get_all_country_data('Singapore')

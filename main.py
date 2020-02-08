@@ -12,30 +12,18 @@ confirmed = singapore_data['confirmed']['cases']
 recovered = singapore_data['recovered']['cases']
 death = singapore_data['death']['cases']
 
-# all the lenghts should be the same
-length = len(confirmed)
-print(length)
-
-# move this into the nCOV class
-if len(recovered) != length:
-  for i in range(length - len(recovered)):
-    recovered.append(None)
-if len(death) != length:
-  for i in range(length - len(death)):
-    death.append(None)
-print(len(death))
-
 # # convert dates to matplotlib dates
 dates = [mdates.date2num(d) for d in dates]
 
-# format dates correctyl and nicely
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+# style preset
+# plt.xkcd()
+# plt.style.use('fivethirtyeight')
+
+# format dates correctyl and nicely %m/%d/%Y
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %-d, %-y'))
 
 # interval so graph is not cluttered
 plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
-
-
-plt.plot(dates, confirmed,  label='Confirmed cases')
 
 # possibility of deaths and recovers to be empty
 try: plt.plot(dates, death,  label='Death cases')
@@ -44,6 +32,8 @@ except: print("No deaths")
 try: plt.plot(dates, recovered,  label='Recovered cases')
 except: print("No recoveries")
 
+plt.plot(dates, confirmed,  label='Confirmed cases')
+
 plt.xlabel('Date')
 plt.ylabel('Cases')
 plt.title('2019-nCoV Singapore')
@@ -51,6 +41,9 @@ plt.title('2019-nCoV Singapore')
 # # # make the dates slant
 plt.gcf().autofmt_xdate()
 
-# plt.scale("log")
+# plt.yscale("log")
 plt.legend()
+
+plt.tight_layout()
+
 plt.show()
